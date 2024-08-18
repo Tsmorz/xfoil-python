@@ -19,7 +19,7 @@ make test
 Using
 -----------------------------------------
 ```pycon
-airfoil = load_airfoil("airfoil.txt")
+airfoil = load_airfoil("airfoil.txt")  # still need to implement
 a, cl, cd, cm, cp = run_xfoil(
     airfoil, alpha, reynolds_number, max_iter
 )

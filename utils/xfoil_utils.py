@@ -1,6 +1,7 @@
 from src.xfoil import XFoil
 from typing import Any
 from src.xfoil.model import Airfoil
+from src.xfoil.test import naca0012
 
 
 def run_xfoil(
@@ -25,3 +26,13 @@ def run_xfoil(
     xf.max_iter = max_iter
 
     return xf.aseq(alpha, alpha + 1, 1)
+
+
+def main():
+    airfoil = naca0012
+    _ = run_xfoil(airfoil, 0, 1e7)
+    return None
+
+
+if __name__ == "__main__":
+    main()
