@@ -1,6 +1,6 @@
-from xfoil import XFoil
+from src.xfoil import XFoil
 from typing import Any
-from xfoil.model import Airfoil
+from src.xfoil.model import Airfoil
 
 
 def run_xfoil(

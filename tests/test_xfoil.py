@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(1, "/".join(os.path.realpath(__file__).split("/")[0:-2]))
 from utils.xfoil_utils import run_xfoil
-from xfoil.test import naca0012
+from src.xfoil.test import naca0012
 from data.naca0012 import expected_naca0012
 
 
