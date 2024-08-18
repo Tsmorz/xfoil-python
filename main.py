@@ -24,7 +24,7 @@ def main() -> None:
     xf.n_crit = 9
     xf.max_iter = 150
     step = 0.25
-    a, cl, cd, cm, cp = xf.aseq(-9, 19, step)
+    a, cl, cd, cm, cp = xf.aseq(-args.alpha, args.alpha, step)
 
     plt.plot(a, cl)
     plt.xlabel("Angle of Attack (degrees)")
