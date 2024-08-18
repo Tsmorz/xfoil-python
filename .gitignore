@@ -2,7 +2,7 @@ build/
 dist/
 *.egg-info/
 __pycache__
-venv/
+.venv/
 .idea/
 cmake-build-debug/
 .DS_Store
