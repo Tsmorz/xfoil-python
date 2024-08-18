@@ -47,7 +47,7 @@ class XFoil(object):
     max_iter
     """
 
-    def __init__(self):
+    def __init__(self):  # type: ignore[no-untyped-def]
         super().__init__()
         tmp = NamedTemporaryFile(mode="wb", delete=False, suffix=lib_ext)
         tmp.close()
@@ -62,7 +62,7 @@ class XFoil(object):
         self._lib.get_mach.restype = c_float
         self._lib.get_n_crit.restype = c_float
 
-    def __del__(self):
+    def __del__(self):  # type: ignore[no-untyped-def]
         handle = self._lib._handle
         del self._lib
         try:
@@ -73,16 +73,16 @@ class XFoil(object):
             os.remove(self._lib_path)
 
     @property
-    def print(self):
+    def print(self):  # type: ignore[no-untyped-def]
         """bool: True if console output should be shown."""
         return self._lib.get_print()
 
     @print.setter
-    def print(self, value):
+    def print(self, value):  # type: ignore[no-untyped-def]
         self._lib.set_print(byref(c_bool(value)))
 
     @property
-    def airfoil(self):
+    def airfoil(self):  # type: ignore[no-untyped-def]
         """Airfoil: Instance of the Airfoil class."""
         n = self._lib.get_n_coords()
         x = np.asfortranarray(np.zeros(n), dtype=c_float)
@@ -93,7 +93,7 @@ class XFoil(object):
         return Airfoil(x.astype(float), y.astype(float))
 
     @airfoil.setter
-    def airfoil(self, airfoil):
+    def airfoil(self, airfoil):  # type: ignore[no-untyped-def]
         self._airfoil = airfoil
         self._lib.set_airfoil(
             np.asfortranarray(airfoil.x.flatten(), dtype=c_float).ctypes.data_as(fptr),
@@ -102,25 +102,25 @@ class XFoil(object):
         )
 
     @property
-    def Re(self):
+    def Re(self):  # type: ignore[no-untyped-def]
         """float: Reynolds number."""
         return float(self._lib.get_reynolds())
 
     @Re.setter
-    def Re(self, value):
+    def Re(self, value):  # type: ignore[no-untyped-def]
         self._lib.set_reynolds(byref(c_float(value)))
 
     @property
-    def M(self):
+    def M(self):  # type: ignore[no-untyped-def]
         """float: Mach number."""
         return float(self._lib.get_mach())
 
     @M.setter
-    def M(self, value):
+    def M(self, value):  # type: ignore[no-untyped-def]
         self._lib.set_mach(byref(c_float(value)))
 
     @property
-    def xtr(self):
+    def xtr(self):  # type: ignore[no-untyped-def]
         """tuple(float, float): Top and bottom flow trip x/c locations."""
         xtr_top = c_float()
         xtr_bot = c_float()
@@ -128,28 +128,28 @@ class XFoil(object):
         return float(xtr_top), float(xtr_bot)
 
     @xtr.setter
-    def xtr(self, value):
+    def xtr(self, value):  # type: ignore[no-untyped-def]
         self._lib.set_xtr(byref(c_float(value[0])), byref(c_float(value[1])))
 
     @property
-    def n_crit(self):
+    def n_crit(self):  # type: ignore[no-untyped-def]
         """float: Critical amplification ratio."""
         return float(self._lib.get_n_crit())
 
     @n_crit.setter
-    def n_crit(self, value):
+    def n_crit(self, value):  # type: ignore[no-untyped-def]
         self._lib.set_n_crit(byref(c_float(value)))
 
     @property
-    def max_iter(self):
+    def max_iter(self):  # type: ignore[no-untyped-def]
         """int: Maximum number of iterations."""
         return int(self._lib.get_max_iter())
 
     @max_iter.setter
-    def max_iter(self, max_iter):
+    def max_iter(self, max_iter):  # type: ignore[no-untyped-def]
         self._lib.set_max_iter(byref(c_int(max_iter)))
 
-    def naca(self, specifier):
+    def naca(self, specifier):  # type: ignore[no-untyped-def]
         """Set a NACA 4 or 5 series airfoil.
 
         Parameters
@@ -159,7 +159,7 @@ class XFoil(object):
         """
         self._lib.set_naca(byref(c_int(int(specifier))))
 
-    def reset_bls(self):
+    def reset_bls(self):  # type: ignore[no-untyped-def]
         """Reset the boundary layers to be reinitialized on the next analysis."""
         self._lib.reset_bls()
 
@@ -171,7 +171,7 @@ class XFoil(object):
         ctr_ratio=0.2,
         xt_ref=(1, 1),
         xb_ref=(1, 1),
-    ):
+    ):  # type: ignore[no-untyped-def]
         """Re-panel airfoil.
 
         Parameters
@@ -200,7 +200,7 @@ class XFoil(object):
             byref(c_float(xb_ref[1])),
         )
 
-    def filter(self, factor=0.2):
+    def filter(self, factor=0.2):  # type: ignore[no-untyped-def]
         """Filter surface speed distribution using modified Hanning filter.
 
         Parameters
@@ -210,7 +210,7 @@ class XFoil(object):
         """
         self._lib.filter(byref(c_float(factor)))
 
-    def a(self, a):
+    def a(self, a):  # type: ignore[no-untyped-def]
         """Analyze airfoil at a fixed angle of attack.
 
         Parameters
@@ -239,7 +239,7 @@ class XFoil(object):
             else (np.nan, np.nan, np.nan, np.nan)
         )
 
-    def cl(self, cl):
+    def cl(self, cl):  # type: ignore[no-untyped-def]
         """ "Analyze airfoil at a fixed lift coefficient.
 
         Parameters
@@ -268,7 +268,7 @@ class XFoil(object):
             else (np.nan, np.nan, np.nan, np.nan)
         )
 
-    def aseq(self, a_start, a_end, a_step):
+    def aseq(self, a_start, a_end, a_step):  # type: ignore[no-untyped-def]
         """Analyze airfoil at a sequence of angles of attack.
 
         The analysis is done for the angles of attack given by range(a_start, a_end, a_step).
@@ -318,7 +318,7 @@ class XFoil(object):
             cp.astype(float),
         )
 
-    def cseq(self, cl_start, cl_end, cl_step):
+    def cseq(self, cl_start, cl_end, cl_step):  # type: ignore[no-untyped-def]
         """Analyze airfoil at a sequence of lift coefficients.
 
         The analysis is done for the lift coefficients given by range(cl_start, cl_end, cl_step).
@@ -368,7 +368,7 @@ class XFoil(object):
             cp.astype(float),
         )
 
-    def get_cp_distribution(self):
+    def get_cp_distribution(self):  # type: ignore[no-untyped-def]
         """Get the Cp distribution from the last converged point.
 
         Returns

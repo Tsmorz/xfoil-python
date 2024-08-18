@@ -28,35 +28,35 @@ class Airfoil(object):
     y
     """
 
-    def __init__(self, x, y) -> None:
+    def __init__(self, x, y) -> None:  # type: ignore[no-untyped-def]
         super().__init__()
         self.coords = np.ndarray((0, 2))
         self.x = x
         self.y = y
 
     @property
-    def n_coords(self):
+    def n_coords(self):  # type: ignore[no-untyped-def]
         """int: Number of coordinates which define the airfoil surface."""
         return self.coords.shape[0]
 
     @property
-    def x(self):
+    def x(self):  # type: ignore[no-untyped-def]
         """np.ndarray: List of x-coordinates of the airfoil surface."""
         return self.coords[:, 0]
 
     @x.setter
-    def x(self, value):
+    def x(self, value):  # type: ignore[no-untyped-def]
         v = value.flatten()
         self.coords = np.resize(self.coords, (v.size, 2))
         self.coords[:, 0] = v[:]
 
     @property
-    def y(self):
+    def y(self):  # type: ignore[no-untyped-def]
         """np.ndarray: List of y-coordinates of the airfoil surface."""
         return self.coords[:, 1]
 
     @y.setter
-    def y(self, value):
+    def y(self, value):  # type: ignore[no-untyped-def]
         v = value.flatten()
         self.coords = np.resize(self.coords, (v.size, 2))
         self.coords[:, 1] = v[:]

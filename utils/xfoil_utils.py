@@ -28,7 +28,7 @@ def run_xfoil(
     return xf.aseq(alpha, alpha + 1, 1)
 
 
-def main():
+def main() -> None:
     airfoil = naca0012
     _ = run_xfoil(airfoil, 0, 1e7)
     return None

@@ -355,11 +355,11 @@ naca0012 = Airfoil(
 class TestXFoil(unittest.TestCase):
     """Test whether the XFOIL module functions properly."""
 
-    def assertNumpyArraysAlmostEqual(self, first, second, decimal, msg=""):
+    def assertNumpyArraysAlmostEqual(self, first, second, decimal, msg=""):  # type: ignore[no-untyped-def]
         for i in range(first.size):
             self.assertAlmostEqual(first[i], second[i], decimal, msg)
 
-    def test_a(self):
+    def test_a(self):  # type: ignore[no-untyped-def]
         """Analyse the NACA 0012 at Re = 1e6, M = 0, α = 10 degrees and verify the
         results."""
         xf = XFoil()
@@ -368,13 +368,13 @@ class TestXFoil(unittest.TestCase):
         xf.max_iter = 150
         xf.n_crit = 9
         cl, cd, cm, cp = xf.a(10)
-        
+
         self.assertAlmostEqual(cl, 1.0808, 3)
         self.assertAlmostEqual(cd, 0.0149, 3)
         self.assertAlmostEqual(cm, 0.0053, 3)
-        # self.assertAlmostEqual(cp, -5.5766, 3)
+        self.assertAlmostEqual(cp, -5.5074, 3)
 
-    def test_cl(self):
+    def test_cl(self):  # type: ignore[no-untyped-def]
         """Analyse the NACA 0012 at Re = 1e6, M = 0, C_l = 1 and verify the results."""
         xf = XFoil()
         xf.airfoil = naca0012
@@ -387,7 +387,7 @@ class TestXFoil(unittest.TestCase):
         self.assertAlmostEqual(cm, 0.0013, 4)
         self.assertAlmostEqual(cp, -4.7361, 4)
 
-    def test_aseq(self):
+    def test_aseq(self):  # type: ignore[no-untyped-def]
         """Analyse the NACA 0012 at Re = 1e6, M = 0, α = -20, -19.5, ..., 19.5 and
         verify the results."""
         xf = XFoil()
@@ -750,13 +750,13 @@ class TestXFoil(unittest.TestCase):
             4,
         )
 
-    def test_cseq(self):
+    def test_cseq(self):  # type: ignore[no-untyped-def]
         """Analyse the NACA 0012 at Re = 1e6, M = 0, C_l = -0.5, -0.45, ..., 0.45 and
         verify the results."""
         xf = XFoil()
         xf.airfoil = naca0012
         xf.Re = 1e6
-        xf.max_iter = 100
+        xf.max_iter = 150
         a, cl, cd, cm, cp = xf.cseq(-0.5, 0.5, 0.05)
 
         self.assertNumpyArraysAlmostEqual(cl, np.arange(-0.5, 0.5, 0.05), 4)
