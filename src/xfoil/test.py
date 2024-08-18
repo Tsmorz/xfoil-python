@@ -396,7 +396,7 @@ class TestXFoil(unittest.TestCase):
         xf.max_iter = 150
         a, cl, cd, cm, cp = xf.aseq(-20, 20, 0.5)
 
-        self.assertNumpyArraysAlmostEqual(a, np.arange(-20, 20, 0.5), 4)
+        self.assertNumpyArraysAlmostEqual(a, np.arange(-20, 20, 0.5), 4)  # type: ignore[no-untyped-call]
         self.assertNumpyArraysAlmostEqual(
             cl,
             np.array(
@@ -484,7 +484,7 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
         self.assertNumpyArraysAlmostEqual(
             cd,
             np.array(
@@ -572,7 +572,7 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
         self.assertNumpyArraysAlmostEqual(
             cm,
             np.array(
@@ -660,7 +660,7 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
         self.assertNumpyArraysAlmostEqual(
             cp,
             np.array(
@@ -748,9 +748,9 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
 
-    def test_cseq(self):  # type: ignore[no-untyped-def]
+    def test_cseq(self) -> None:
         """Analyse the NACA 0012 at Re = 1e6, M = 0, C_l = -0.5, -0.45, ..., 0.45 and
         verify the results."""
         xf = XFoil()
@@ -759,7 +759,8 @@ class TestXFoil(unittest.TestCase):
         xf.max_iter = 150
         a, cl, cd, cm, cp = xf.cseq(-0.5, 0.5, 0.05)
 
-        self.assertNumpyArraysAlmostEqual(cl, np.arange(-0.5, 0.5, 0.05), 4)
+        self.assertNumpyArraysAlmostEqual(cl, np.arange(-0.5, 0.5, 0.05), 4)  # type: ignore[no-untyped-call]
+
         self.assertNumpyArraysAlmostEqual(
             a,
             np.array(
@@ -787,7 +788,7 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
         self.assertNumpyArraysAlmostEqual(
             cd,
             np.array(
@@ -815,7 +816,7 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
         self.assertNumpyArraysAlmostEqual(
             cm,
             np.array(
@@ -843,7 +844,7 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
         self.assertNumpyArraysAlmostEqual(
             cp,
             np.array(
@@ -871,7 +872,7 @@ class TestXFoil(unittest.TestCase):
                 ]
             ),
             4,
-        )
+        )  # type: ignore[no-untyped-call]
 
 
 if __name__ == "__main__":

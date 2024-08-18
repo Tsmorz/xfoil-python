@@ -10,7 +10,7 @@ from data.naca0012 import expected_naca0012
 
 
 @pytest.mark.parametrize("expected_values", expected_naca0012)
-def test_run_xfoil(expected_values: np.typing.NDArray[np.float64]) -> None:
+def test_run_xfoil(expected_values: np.ndarray[np.float64, ...]) -> None:
     """
     Test whether xfoil simulation results match expected values.
     """

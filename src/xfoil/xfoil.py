@@ -19,7 +19,7 @@ import numpy as np
 import ctypes
 import os
 import glob
-
+from typing import Tuple
 from ctypes import c_bool, c_int, c_float, byref, POINTER, cdll
 from shutil import copy2
 from tempfile import NamedTemporaryFile
@@ -43,11 +43,11 @@ class XFoil(object):
     Re
     M
     xtr
-    n_crit
-    max_iter
+    n_crit: critical Reynolds number
+    max_iter: maximum number of iterations
     """
 
-    def __init__(self):  # type: ignore[no-untyped-def]
+    def __init__(self) -> None:
         super().__init__()
         tmp = NamedTemporaryFile(mode="wb", delete=False, suffix=lib_ext)
         tmp.close()
@@ -165,13 +165,13 @@ class XFoil(object):
 
     def repanel(
         self,
-        n_nodes=160,
-        cv_par=1,
-        cte_ratio=0.15,
-        ctr_ratio=0.2,
-        xt_ref=(1, 1),
-        xb_ref=(1, 1),
-    ):  # type: ignore[no-untyped-def]
+        n_nodes: int = 160,
+        cv_par: float = 1,
+        cte_ratio: float = 0.15,
+        ctr_ratio: float = 0.2,
+        xt_ref: tuple[float, float] = (1, 1),
+        xb_ref: tuple[float, float] = (1, 1),
+    ) -> None:
         """Re-panel airfoil.
 
         Parameters
@@ -203,14 +203,12 @@ class XFoil(object):
     def filter(self, factor=0.2):  # type: ignore[no-untyped-def]
         """Filter surface speed distribution using modified Hanning filter.
 
-        Parameters
-        ----------
-        factor : float
-            Filter parameter. If set to 1, the standard, full Hanning filter is applied. Default is 0.2.
+        Parameters ---------- factor : float Filter parameter. If set to 1,
+        the standard, full Hanning filter is applied. Default is 0.2.
         """
         self._lib.filter(byref(c_float(factor)))
 
-    def a(self, a):  # type: ignore[no-untyped-def]
+    def a(self, a: float) -> tuple[float, float, float, float]:
         """Analyze airfoil at a fixed angle of attack.
 
         Parameters
@@ -218,10 +216,8 @@ class XFoil(object):
         a : float
             Angle of attack in degrees
 
-        Returns
-        -------
-        cl, cd, cm, cp : float
-            Corresponding values of the lift, drag, moment, and minimum pressure coefficients.
+        Returns ------- cl, cd, cm, cp : float Corresponding values of the lift,
+        drag, moment, and minimum pressure coefficients.
         """
         cl = c_float()
         cd = c_float()
@@ -239,18 +235,16 @@ class XFoil(object):
             else (np.nan, np.nan, np.nan, np.nan)
         )
 
-    def cl(self, cl):  # type: ignore[no-untyped-def]
-        """ "Analyze airfoil at a fixed lift coefficient.
+    def cl(self, cl: float) -> Tuple[float, float, float, float]:
+        """Analyze airfoil at a fixed lift coefficient.
 
         Parameters
         ----------
         cl : float
             Lift coefficient
 
-        Returns
-        -------
-        a, cd, cm, cp : float
-            Corresponding values of the angle of attack, drag, moment, and minimum pressure coefficients.
+        Returns ------- a, cd, cm, cp : float Corresponding values of the angle of
+        attack, drag, moment, and minimum pressure coefficients.
         """
         a = c_float()
         cd = c_float()
@@ -268,20 +262,19 @@ class XFoil(object):
             else (np.nan, np.nan, np.nan, np.nan)
         )
 
-    def aseq(self, a_start, a_end, a_step):  # type: ignore[no-untyped-def]
+    def aseq(self, a_start: float, a_end: float, a_step: float) -> Tuple:
         """Analyze airfoil at a sequence of angles of attack.
 
-        The analysis is done for the angles of attack given by range(a_start, a_end, a_step).
+        The analysis is done for the angles of attack given by range(a_start, a_end,
+        a_step).
 
         Parameters
         ----------
         a_start, a_end, a_step : float
             Start, end, and increment angles for the range.
 
-        Returns
-        -------
-        a, cl, cd, cm, co : np.ndarray
-            Lists of angles of attack and their corresponding lift, drag, moment, and minimum pressure coefficients.
+        Returns ------- a, cl, cd, cm, co : np.ndarray Lists of angles of attack and
+        their corresponding lift, drag, moment, and minimum pressure coefficients.
         """
         n = abs(int((a_end - a_start) / a_step))
 
@@ -318,20 +311,19 @@ class XFoil(object):
             cp.astype(float),
         )
 
-    def cseq(self, cl_start, cl_end, cl_step):  # type: ignore[no-untyped-def]
+    def cseq(self, cl_start: float, cl_end: float, cl_step: float) -> Tuple:
         """Analyze airfoil at a sequence of lift coefficients.
 
-        The analysis is done for the lift coefficients given by range(cl_start, cl_end, cl_step).
+        The analysis is done for the lift coefficients given by range(cl_start,
+        cl_end, cl_step).
 
         Parameters
         ----------
         cl_start, cl_end, cl_step : float
             Start, end, and increment lift coefficients for the range.
 
-        Returns
-        -------
-        a, cl, cd, cm, co : np.ndarray
-            Lists of angles of attack and their corresponding lift, drag, moment, and minimum pressure coefficients.
+        Returns ------- a, cl, cd, cm, co : np.ndarray Lists of angles of attack and
+        their corresponding lift, drag, moment, and minimum pressure coefficients.
         """
         n = abs(int((cl_end - cl_start) / cl_step))
 
