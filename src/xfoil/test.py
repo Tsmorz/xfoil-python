@@ -368,7 +368,7 @@ class TestXFoil(unittest.TestCase):
         xf.max_iter = 150
         xf.n_crit = 9
         cl, cd, cm, cp = xf.a(10)
-
+        
         self.assertAlmostEqual(cl, 1.0808, 3)
         self.assertAlmostEqual(cd, 0.0149, 3)
         self.assertAlmostEqual(cm, 0.0053, 3)
