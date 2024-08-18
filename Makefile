@@ -5,11 +5,11 @@ init:
 	poetry env info
 	@echo "Created virtual environment"
 test:
-	poetry run pytest --cov=src/ tests/
+	poetry run pytest --cov=utils/ tests/
 
 format:
 	ruff check --fix
-	poetry run mypy --ignore-missing-imports
+	poetry run mypy --ignore-missing-imports utils/ tests/
 
 clean:
 	rm -rf .venv
