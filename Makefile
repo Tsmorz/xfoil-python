@@ -5,6 +5,7 @@ init:
 	poetry env info
 	@echo "Created virtual environment"
 test:
+	poetry run python -m unittest src/xfoil/test.py
 	poetry run pytest --cov=utils/ tests/
 
 format:
