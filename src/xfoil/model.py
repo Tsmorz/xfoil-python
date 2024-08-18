@@ -28,7 +28,7 @@ class Airfoil(object):
     y
     """
 
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         super().__init__()
         self.coords = np.ndarray((0, 2))
         self.x = x

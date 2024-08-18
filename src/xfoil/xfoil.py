@@ -27,8 +27,8 @@ from tempfile import NamedTemporaryFile
 from .model import Airfoil
 
 here = os.path.abspath(os.path.dirname(__file__))
-lib_path = glob.glob(os.path.join(here, 'libxfoil.*'))[0]
-lib_ext = lib_path[lib_path.rfind('.'):]
+lib_path = glob.glob(os.path.join(here, "libxfoil.*"))[0]
+lib_ext = lib_path[lib_path.rfind(".") :]
 
 fptr = POINTER(c_float)
 bptr = POINTER(c_bool)
@@ -49,7 +49,7 @@ class XFoil(object):
 
     def __init__(self):
         super().__init__()
-        tmp = NamedTemporaryFile(mode='wb', delete=False, suffix=lib_ext)
+        tmp = NamedTemporaryFile(mode="wb", delete=False, suffix=lib_ext)
         tmp.close()
         self._lib_path = tmp.name
         copy2(lib_path, self._lib_path)
@@ -87,7 +87,9 @@ class XFoil(object):
         n = self._lib.get_n_coords()
         x = np.asfortranarray(np.zeros(n), dtype=c_float)
         y = np.asfortranarray(np.zeros(n), dtype=c_float)
-        self._lib.get_airfoil(x.ctypes.data_as(fptr), y.ctypes.data_as(fptr), byref(c_int(n)))
+        self._lib.get_airfoil(
+            x.ctypes.data_as(fptr), y.ctypes.data_as(fptr), byref(c_int(n))
+        )
         return Airfoil(x.astype(float), y.astype(float))
 
     @airfoil.setter
@@ -96,7 +98,7 @@ class XFoil(object):
         self._lib.set_airfoil(
             np.asfortranarray(airfoil.x.flatten(), dtype=c_float).ctypes.data_as(fptr),
             np.asfortranarray(airfoil.y.flatten(), dtype=c_float).ctypes.data_as(fptr),
-            byref(c_int(airfoil.n_coords))
+            byref(c_int(airfoil.n_coords)),
         )
 
     @property
@@ -161,7 +163,15 @@ class XFoil(object):
         """Reset the boundary layers to be reinitialized on the next analysis."""
         self._lib.reset_bls()
 
-    def repanel(self, n_nodes=160, cv_par=1, cte_ratio=0.15, ctr_ratio=0.2, xt_ref=(1, 1), xb_ref=(1, 1)):
+    def repanel(
+        self,
+        n_nodes=160,
+        cv_par=1,
+        cte_ratio=0.15,
+        ctr_ratio=0.2,
+        xt_ref=(1, 1),
+        xb_ref=(1, 1),
+    ):
         """Re-panel airfoil.
 
         Parameters
@@ -179,10 +189,16 @@ class XFoil(object):
         xb_ref : tuple of two floats
             Bottom side refined area x/c limits
         """
-        self._lib.repanel(byref(c_int(n_nodes)), byref(c_float(cv_par)),
-                          byref(c_float(cte_ratio)), byref(c_float(ctr_ratio)),
-                          byref(c_float(xt_ref[0])), byref(c_float(xt_ref[1])),
-                          byref(c_float(xb_ref[0])), byref(c_float(xb_ref[1])))
+        self._lib.repanel(
+            byref(c_int(n_nodes)),
+            byref(c_float(cv_par)),
+            byref(c_float(cte_ratio)),
+            byref(c_float(ctr_ratio)),
+            byref(c_float(xt_ref[0])),
+            byref(c_float(xt_ref[1])),
+            byref(c_float(xb_ref[0])),
+            byref(c_float(xb_ref[1])),
+        )
 
     def filter(self, factor=0.2):
         """Filter surface speed distribution using modified Hanning filter.
@@ -213,12 +229,18 @@ class XFoil(object):
         cp = c_float()
         conv = c_bool()
 
-        self._lib.alfa(byref(c_float(a)), byref(cl), byref(cd), byref(cm), byref(cp), byref(conv))
+        self._lib.alfa(
+            byref(c_float(a)), byref(cl), byref(cd), byref(cm), byref(cp), byref(conv)
+        )
 
-        return (cl.value, cd.value, cm.value, cp.value) if conv else (np.nan, np.nan, np.nan, np.nan)
+        return (
+            (cl.value, cd.value, cm.value, cp.value)
+            if conv
+            else (np.nan, np.nan, np.nan, np.nan)
+        )
 
     def cl(self, cl):
-        """"Analyze airfoil at a fixed lift coefficient.
+        """ "Analyze airfoil at a fixed lift coefficient.
 
         Parameters
         ----------
@@ -236,9 +258,15 @@ class XFoil(object):
         cp = c_float()
         conv = c_bool()
 
-        self._lib.cl(byref(c_float(cl)), byref(a), byref(cd), byref(cm), byref(cp), byref(conv))
+        self._lib.cl(
+            byref(c_float(cl)), byref(a), byref(cd), byref(cm), byref(cp), byref(conv)
+        )
 
-        return (a.value, cd.value, cm.value, cp.value) if conv else (np.nan, np.nan, np.nan, np.nan)
+        return (
+            (a.value, cd.value, cm.value, cp.value)
+            if conv
+            else (np.nan, np.nan, np.nan, np.nan)
+        )
 
     def aseq(self, a_start, a_end, a_step):
         """Analyze airfoil at a sequence of angles of attack.
@@ -264,10 +292,17 @@ class XFoil(object):
         cp = np.zeros(n, dtype=c_float)
         conv = np.zeros(n, dtype=c_bool)
 
-        self._lib.aseq(byref(c_float(a_start)), byref(c_float(a_end)), byref(c_int(n)),
-                       a.ctypes.data_as(fptr), cl.ctypes.data_as(fptr),
-                       cd.ctypes.data_as(fptr), cm.ctypes.data_as(fptr),
-                       cp.ctypes.data_as(fptr), conv.ctypes.data_as(bptr))
+        self._lib.aseq(
+            byref(c_float(a_start)),
+            byref(c_float(a_end)),
+            byref(c_int(n)),
+            a.ctypes.data_as(fptr),
+            cl.ctypes.data_as(fptr),
+            cd.ctypes.data_as(fptr),
+            cm.ctypes.data_as(fptr),
+            cp.ctypes.data_as(fptr),
+            conv.ctypes.data_as(bptr),
+        )
 
         isnan = np.logical_not(conv)
         a[isnan] = np.nan
@@ -275,7 +310,13 @@ class XFoil(object):
         cd[isnan] = np.nan
         cm[isnan] = np.nan
         cp[isnan] = np.nan
-        return a.astype(float), cl.astype(float), cd.astype(float), cm.astype(float), cp.astype(float)
+        return (
+            a.astype(float),
+            cl.astype(float),
+            cd.astype(float),
+            cm.astype(float),
+            cp.astype(float),
+        )
 
     def cseq(self, cl_start, cl_end, cl_step):
         """Analyze airfoil at a sequence of lift coefficients.
@@ -301,10 +342,17 @@ class XFoil(object):
         cp = np.zeros(n, dtype=c_float)
         conv = np.zeros(n, dtype=c_bool)
 
-        self._lib.cseq(byref(c_float(cl_start)), byref(c_float(cl_end)), byref(c_int(n)),
-                       a.ctypes.data_as(fptr), cl.ctypes.data_as(fptr),
-                       cd.ctypes.data_as(fptr), cm.ctypes.data_as(fptr),
-                       cp.ctypes.data_as(fptr), conv.ctypes.data_as(bptr))
+        self._lib.cseq(
+            byref(c_float(cl_start)),
+            byref(c_float(cl_end)),
+            byref(c_int(n)),
+            a.ctypes.data_as(fptr),
+            cl.ctypes.data_as(fptr),
+            cd.ctypes.data_as(fptr),
+            cm.ctypes.data_as(fptr),
+            cp.ctypes.data_as(fptr),
+            conv.ctypes.data_as(bptr),
+        )
 
         isnan = np.logical_not(conv)
         a[isnan] = np.nan
@@ -312,7 +360,13 @@ class XFoil(object):
         cd[isnan] = np.nan
         cm[isnan] = np.nan
         cp[isnan] = np.nan
-        return a.astype(float), cl.astype(float), cd.astype(float), cm.astype(float), cp.astype(float)
+        return (
+            a.astype(float),
+            cl.astype(float),
+            cd.astype(float),
+            cm.astype(float),
+            cp.astype(float),
+        )
 
     def get_cp_distribution(self):
         """Get the Cp distribution from the last converged point.
@@ -331,5 +385,10 @@ class XFoil(object):
         y = np.zeros(n, dtype=c_float)
         cp = np.zeros(n, dtype=c_float)
 
-        self._lib.get_cp(x.ctypes.data_as(fptr), y.ctypes.data_as(fptr), cp.ctypes.data_as(fptr), byref(c_int(n)))
+        self._lib.get_cp(
+            x.ctypes.data_as(fptr),
+            y.ctypes.data_as(fptr),
+            cp.ctypes.data_as(fptr),
+            byref(c_int(n)),
+        )
         return x.astype(float), y.astype(float), cp.astype(float)
