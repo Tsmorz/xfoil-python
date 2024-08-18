@@ -1,7 +1,8 @@
-from src.xfoil import XFoil
+from src.xfoil.xfoil import XFoil
 from typing import Any
 from src.xfoil.model import Airfoil
-from src.xfoil.test import naca0012
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def run_xfoil(
@@ -28,9 +29,34 @@ def run_xfoil(
     return xf.aseq(alpha, alpha + 1, 1)
 
 
+def load_airfoil(filename: str, plot=True) -> Airfoil:
+    """
+    Load airfoil data from .dat file.
+
+    Args:
+    filename (str): File path of airfoil data.
+
+    Returns: Airfoil object
+
+    """
+    coords = pd.read_csv(filename, sep=",", header=None).to_numpy()
+    x, y = coords[:, 0], coords[:, 1]
+
+    if plot:
+        fig, ax = plt.subplots(1, 1, figsize=(8, 2))
+        plt.plot(x, y)
+        plt.title("Airfoil plot")
+        plt.xlabel("x-coordinate")
+        plt.ylabel("y-coordinate")
+        ax.set_aspect("equal")
+        plt.show()  # Display airfoil plot for verification
+    return Airfoil(x, y)
+
+
 def main() -> None:
-    airfoil = naca0012
-    _ = run_xfoil(airfoil, 0, 1e7)
+    # Load airfoil data from file
+    airfoil = load_airfoil("/data/sd7062.csv", plot=False)
+    _ = run_xfoil(airfoil, 0, 2e5, max_iter=50)  # Run XFoil simulation with
     return None
 
 
