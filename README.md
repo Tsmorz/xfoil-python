@@ -5,16 +5,14 @@ This repo is forked from https://github.com/DARcorporation/xfoil-python
 
 Installing the Python Module
 -----------------------------------------
-1. Install Poetry
-2. Run these commands in your terminal
-```bash
-poetry shell
-poetry install
-```
-3. Make sure it was installed correctly
-```bash
-make test
-```
+1. Install [Poetry](https://python-poetry.org/docs/)
+2. ```bash
+   git clone <this/repo>
+   cd <into/the/repo>
+   poetry shell
+   poetry install
+   make test
+   ```
 
 Using
 -----------------------------------------
