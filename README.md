@@ -7,8 +7,8 @@ Installing the Python Module
 -----------------------------------------
 1. Install [Poetry](https://python-poetry.org/docs/)
 2. ```bash
-   git clone <this/repo>
-   cd <into/the/repo>
+   git clone https://github.com/Tsmorz/xfoil-python.git
+   cd xfoil-python
    poetry shell
    poetry install
    make test
