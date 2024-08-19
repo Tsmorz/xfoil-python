@@ -16,13 +16,6 @@ Installing the Python Module
 
 Using
 -----------------------------------------
-```pycon
-airfoil = load_airfoil("airfoil.txt")  # still need to implement
-a, cl, cd, cm, cp = run_xfoil(
-    airfoil, alpha, reynolds_number, max_iter
-)
-```
-OR
 ```bash
-poetry run python3 <path/to/main.py> <path/to/airfoil.csv> alpha_max
+poetry run python3 <path/to/main.py> <path/to/airfoil.csv> alpha_min alpha_max
 ```
