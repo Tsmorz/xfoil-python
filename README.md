@@ -19,3 +19,5 @@ Using
 ```bash
 poetry run python3 <path/to/main.py> <path/to/airfoil.csv> alpha_min alpha_max
 ```
+![Figure_1](https://github.com/user-attachments/assets/accd83f9-2211-4864-b766-0232a1dd48e2)
+
